@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static '/css/all_orders.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3153CA",
+                        secondary: "#F1F1F1",
+                        text: "#343434",
+                        text1: "#C4C4C4",
+                        text3: "#323C47"
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+<!--Container-->
+<div class=" flex">
+    <!--SideBar-->
+    {% include 'sidebar.html' %}
+    <main class="content px-14 py-8 flex flex-col gap-3" style="padding: 4%">
+        <!--list of partners-->
+        <h2 class="text-4xl font-bold text-text">Cписок сертификатов</h2>
+        <!--Count of partners -->
+        <div class=" flex gap-24">
+            <div class=" flex flex-col items-center">
+                <h2 class=" text-text font-medium text-6xl">{{total_users}}</h2>
+                <p class=" text-text1 font-medium">Всего пользователей</p>
+            </div>
+        </div>
+        <!--Search-->
+        <form method="get">
+            <div class="nosubmit  w-96">
+                <input class="nosubmit outline-none " type="text" name="search_query"
+                       value="{{ request.GET.search_query }}" placeholder="Search...">
+            </div>
+            <br>
+        </form>
+        <!--Table-->
+        <table class=" mt-10">
+            <!--Headers-->
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Пользователь</th>
+                <th>Ресторат</th>
+                <th>Дата активации</th>
+                <th>Код Сертификата</th>
+                <th>Статус</th>
+
+            </tr>
+            </thead>
+            <!--rows-->
+            <tbody>
+            {% for certificate in certificates %}
+            <tr>
+                <td> {{ certificate.pk }} </td>
+                <td class="items-center text-text3 text-[1rem] font-medium">
+                   {{ certificate.user.first_name }} {{ certificate.user.last_name }}
+                </td>
+                <td>{{ certificate.restaurant }}</td>
+                <td>{{ certificate.start_date }}</td>
+                <td> {{ certificate.encode }} </td>
+                <td>{{ certificate.status }} </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+    </main>
+</div>
+<script>
+    document.getElementById("requestsBtn").addEventListener("click", function () {
+        var dropdown = document.getElementById("dropdown");
+
+        // Переключаем классы для отображения/скрытия элемента с анимацией
+        if (dropdown.classList.contains("hidden")) {
+            dropdown.classList.remove("hidden");
+            dropdown.classList.add("visible");
+        } else {
+            dropdown.classList.remove("visible");
+            dropdown.classList.add("hidden");
+        }
+    });
+
+    function toggleDropdown(restaurantId) {
+        var dropdownMenu = document.getElementById('dropdownMenu' + restaurantId);
+        dropdownMenu.classList.toggle('hidden');
+    }
+
+</script>
+</body>
+
+</html>

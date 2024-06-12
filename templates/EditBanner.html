@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3153CA",
+                        secondary: "#F1F1F1",
+                        text: "#343434"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--Container-->
+<div class=" flex">
+    <!--SideBar-->
+    {% include 'sidebar.html' %}
+    <!--mainContent-->
+    <form method="post" enctype="multipart/form-data" id="outer-form">
+        {% csrf_token %}
+        <main class=" px-14 py-8 content flex">
+            <!--left side-->
+
+            <div class="">
+                <!--photos-->
+                <h1>Баннер</h1>
+                <br>
+                <input type="file" name="image" accept="image/x-png, image/jpeg" id="mainImageInput" style="display: none">
+                <label for="mainImageInput">
+                    <img id="mainImage"  alt="hz"
+                             width="300px" height="300px" src="{{ banner.image.url }}">
+                </label>
+                <button style="margin-top: 20px">Сохранить</button>
+            </div>
+            <!--right side-->
+
+        </main>
+    </form>
+    <script>
+        document.getElementById("requestsBtn").addEventListener("click", function () {
+            var dropdown = document.getElementById("dropdown");
+
+            // Переключаем классы для отображения/скрытия элемента с анимацией
+            if (dropdown.classList.contains("hidden")) {
+                dropdown.classList.remove("hidden");
+                dropdown.classList.add("visible");
+            } else {
+                dropdown.classList.remove("visible");
+                dropdown.classList.add("hidden");
+            }
+        });
+    </script>
+</div>
+<script>
+    const mainInput = document.querySelector('[name="image"]');
+    const mainImage = document.getElementById('mainImage');
+
+    mainInput.addEventListener('change', async function () {
+        const selectedFile = this.files[0];
+        mainImage.src = await convertToBase64(selectedFile);
+    });
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const input_file = document.getElementById('image-file');
+    const imageList = document.getElementById('image-list');
+
+    const convertToBase64 = file => new Promise((resolve) => {
+       const fileReader = new FileReader();
+       fileReader.readAsDataURL(file);
+       fileReader.onload = () => resolve(fileReader.result);
+    });
+</script>
+</body>
+
+</html>

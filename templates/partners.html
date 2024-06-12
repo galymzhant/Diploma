@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Reddel Admin Panel</title>
+    <style>
+        *{
+            line-height: 31.20px; letter-spacing: 0.10px;
+            margin: 0;
+            padding: 0;
+            font-family: Manrope, sans-serif;
+        }
+        body{
+            display: flex;
+        }
+        td{
+            align-items: center;
+            text-align: center;
+        }
+        th{
+            text-align: center;
+        }
+        table tr td {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; gap: 30px; width: 20%; background-color: #F1F1F1; padding: 2% 2%; height: 2000px">
+        <img src="{% static 'images/img_1.png' %}" width="30%">
+        <a href="{% url 'admin1' %}"><img src="{% static 'images/img_2.png' %}" width="70%"></a>
+        <a style="display: flex; align-items: center; gap: 10px; text-decoration: none" href="{% url 'partners' %}"><img src="{% static 'images/img_6.png'%}" width="10%"><h4>Список партнеров</h4></a>
+        <a style="display: flex; align-items: center; gap: 10px"><img src="{% static 'images/img_3.png'%}" width="10%"> <h4>Заявки</h4> </a>
+        <a style="display: flex; align-items: center; gap: 10px"><img src="{% static 'images/img_7.png'%}" width="10%"><h4>Выйти</h4></a>
+    </div>
+    <div style="padding-left: 5%; padding-top: 3%; padding-right: 5%; width: 80%">
+        <h1>Список партнеров</h1>
+        <div style="margin-top: 3%; text-align: center; width: max-content">
+            <h1>40</h1>
+            <a style="color: #C4C4C4; font-size: 15px; font-weight: 500; letter-spacing: 0.15px; word-wrap: break-word">Всего партнеров</a>
+        </div>
+        <form>
+
+        </form>
+        <div style="display: flex; flex-direction: column; gap: 16px; padding: 12px; background: white;">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; max-width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #EBEFF2;">
+                            <th>Лого и название</th>
+                            <th>Статус</th>
+                            <th>Телефон</th>
+                            <th>Адрес</th>
+                            <th>Обработано заявок</th>
+                            <th>Общая сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for restauran in restaurants %}
+                        <tr>
+                            <td style="height: 48px; display: flex; gap: 10px">
+                                <img style="width: 48px; height: 48px;" src="{{ restauran.logo.url }}" alt="Logo">
+                                <p>{{ restauran.title }}</p>
+                            </td>
+                            <td>{{ restauran.novy }}</td>
+                            <td>{{ restauran.phone_number}}</td>
+                            <td>{{ restauran.location }}</td>
+                            <td>2</td>
+                            <td>200 000 ₸</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>

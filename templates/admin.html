@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Reddel Admin Panel</title>
+    <style>
+        *{
+            line-height: 31.20px; letter-spacing: 0.10px;
+            margin: 0;
+            padding: 0;
+            font-family: Manrope, sans-serif;
+        }
+        body{
+            display: flex;
+        }
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 60px;
+          height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+
+        /* The slider */
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        input:checked + .slider {
+          background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+
+        .slider.round:before {
+          border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; gap: 30px; width: 20%; background-color: #F1F1F1; padding: 2% 2%; height: 2000px">
+        <img src="{% static 'images/img_1.png' %}" width="30%">
+        <a href="{% url 'admin1' %}"><img src="{% static 'images/img_2.png' %}" width="70%"></a>
+        <a style="display: flex; align-items: center; gap: 10px; text-decoration: none" href="{% url 'partners' %}"><img src="{% static 'images/img_6.png'%}" width="10%"><h4>Список партнеров</h4></a>
+        <a style="display: flex; align-items: center; gap: 10px"><img src="{% static 'images/img_3.png'%}" width="10%"> <h4>Заявки</h4> </a>
+        <a style="display: flex; align-items: center; gap: 10px"><img src="{% static 'images/img_7.png'%}" width="10%"><h4>Выйти</h4></a>
+    </div>
+    <div style="padding-left: 5%; padding-top: 3%; padding-right: 5%; width: 80%">
+        <div style="display: flex; align-items: center; gap: 30px">
+            <img src="{% static 'images/add_photo.png' %}" width="10%">
+            <h1> Название </h1>
+            <a href="#" style="display: flex; align-items: center;"><img src="{% static 'images/redact.png' %}" width="30%"></a>
+        </div>
+        <div style="margin-top: 50px; font-size: 24px; display: flex; flex-direction: column; gap: 30px">
+            <p style="">Фото</p>
+            <div>
+                <img src="{% static 'images/add.png' %}" width="20%">
+            </div>
+        </div>
+        <div style="margin-top: 50px; font-size: 24px; display: flex; flex-direction: column; gap: 30px">
+            <p style="">Настройки</p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center">
+                <div style="display:flex; gap: 10px">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <p>Тeг 1</p>
+                </div>
+                <select name="tag1" id="tag1" style="padding: 2%; width: 150px; border-width: 0; background-color: #F6F6F6; border-radius: 8px; color: #343434; font-size: 16px; font-weight: 400; line-height: 20.80px; letter-spacing: 0.10px;">
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+                <div style="display:flex; gap: 10px">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <p>Тeг 2</p>
+                </div>
+                <select name="tag1" id="tag1" style="padding: 2%; width: 150px; border-width: 0; background-color: #F6F6F6; border-radius: 8px; color: #343434; font-size: 16px; font-weight: 400; line-height: 20.80px; letter-spacing: 0.10px;">
+                  <option value="volvo">Volvo</option>
+                  <option value="saab">Saab</option>
+                  <option value="mercedes">Mercedes</option>
+                  <option value="audi">Audi</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 50px; font-size: 24px; display: flex; flex-direction: column; gap: 10px">
+            <p style="">Адрес</p>
+            <input style="width: 100%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="0/160 (пример)">
+        </div>
+        <div style="margin-top: 50px; font-size: 24px; display: flex; flex-direction: column; gap: 10px">
+            <p style="">Описание заведения</p>
+            <input style="width: 100%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="0/240 (пример)">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Средний чек</p>
+            </div>
+            <input style="width: 40%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="2000 - 5000 (пример)">
+
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Часы работы 1</p>
+            </div>
+            <div style="display: flex; justify-content: end; gap: 10px">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="ПН-ЧТ (пример)">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="10:00-5:00 (пример)">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Часы работы 2</p>
+            </div>
+            <div style="display: flex; justify-content: end; gap: 10px">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="ПН-ЧТ (пример)">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="10:00-5:00 (пример)">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Часы работы 3</p>
+            </div>
+            <div style="display: flex; justify-content: end; gap: 10px">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="ПН-ЧТ (пример)">
+                <input style="width: 35%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="10:00-5:00 (пример)">
+            </div>
+        </div>
+        <div style="margin-top: 50px; font-size: 24px; display: flex; flex-direction: column; gap: 10px">
+            <p style="">Кухня</p>
+            <input style="width: 100%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0" placeholder="0/160 (пример)">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Номер телефона</p>
+            </div>
+            <input style="width: 30%; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; background: #F6F6F6; border-radius: 8px; border-width: 0; "placeholder="+7 (7_ _) - _ _ _ - _ _ - _ _">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px">
+            <div style="display:flex; gap: 10px">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <p>Меню</p>
+            </div>
+            <a href="#" style="width: 30%; text-align: center; color: #3153CA; text-decoration: none">Загрузить pdf</a>
+        </div>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <div style="margin-top: 100px; font-size: 24px; display: flex; flex-direction: column; gap: 30px">
+                <p>Доступные рассрочки</p>
+                <div style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: inline-flex">
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">30 000 ₸</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">50 000 ₸</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">100 000 ₸</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px;  font-weight: 400; word-wrap: break-word">150 000 ₸</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px;  font-weight: 400; word-wrap: break-word">200 000 ₸</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">300 000 ₸</div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 100px; font-size: 24px; display: flex; flex-direction: column; gap: 30px">
+                <p>Доступные сроки рассрочки</p>
+                <div style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: inline-flex">
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">3 месяца</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">6 месяцев</div>
+                    </div>
+                    <div style="justify-content: flex-start; align-items: center; gap: 22px; display: inline-flex">
+                        <div style="width: 34px; height: 34px; justify-content: center; align-items: center; display: flex">
+                            <div style="width: 34px; height: 34px; border-radius: 4px; border: 1px #0832DE solid"></div>
+                        </div>
+                        <div style="color: black; font-size: 22px; font-weight: 400; word-wrap: break-word">12 месяцев</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

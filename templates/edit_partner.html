@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3153CA",
+                        secondary: "#F1F1F1",
+                        text: "#343434"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--Container-->
+<div class=" flex">
+    <!--SideBar-->
+    {% include 'sidebar.html' %}
+    <!--mainContent-->
+    <form method="post" enctype="multipart/form-data" action="{% url 'restaurant_edit' restaurant.id %}" id="outer-form">
+        {% csrf_token %}
+        <main class=" px-14 py-8 content flex">
+            <!--left side-->
+
+            <div class="">
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Ошибки формы:</strong>
+                    <ul>
+                        {% for error in form.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class=" flex items-center font-bold text-5xl gap-8 mb-8">
+                    <input type="file"
+                          id="image-logo"
+                          accept="image/x-png, image/jpeg"
+                          style="display : none"
+                        />
+                    <label for="image-logo" class=" rounded-full w-32 h-32">
+                        <img id="logo" src="{{ restaurant.logo.url }}" alt="hz"
+                                 class=" rounded-full w-32 h-32">
+                    </label>
+                    <input name="{{ form.title.name }}" value="{{ restaurant.title }}" class="bg-secondary p-3 rounded-md"
+                           placeholder="Название"/>
+                    <svg class="hover:-translate-y-1 transition duration-300 ease-in-out cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                                d="M16.9994 3C17.262 2.73735 17.5738 2.52901 17.917 2.38687C18.2602 2.24473 18.628 2.17157 18.9994 2.17157C19.3708 2.17157 19.7386 2.24473 20.0818 2.38687C20.4249 2.52901 20.7367 2.73735 20.9994 3C21.262 3.26264 21.4704 3.57444 21.6125 3.9176C21.7547 4.26077 21.8278 4.62856 21.8278 5C21.8278 5.37143 21.7547 5.73923 21.6125 6.08239C21.4704 6.42555 21.262 6.73735 20.9994 7L7.49939 20.5L1.99939 22L3.49939 16.5L16.9994 3Z"
+                                stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <!--photos-->
+                <p>Главная фотка</p>
+                <br>
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/x-png, image/jpeg"
+                    id="mainImageInput"
+                    style="display: none"
+                />
+{#            {{ form.image }}#}
+                <label for="mainImageInput">
+                    <img id="mainImage" {% if restaurant.image %} src="{{ restaurant.image.url }}" {% endif %}alt="hz"
+                             width="300px">
+                </label>
+                        <p class=" font-normal text-2xl">Фото</p>
+                <div class=" flex flex-row gap-4" id="uploadImages">
+                    <!--photo card-->
+                    <div class="flex-row gap-4" style="width: 100%; display: flex">
+                        <!--photo card-->
+                        {% for image in images %}
+                        <div class="relative hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+                            <button onclick="delete_restaurant_image({{ image.pk }})"
+                                    class="absolute top-2  right-2 p-1 bg-white rounded-full hover:scale-105 hover:opacity-70  transition duration-300 ease-in-out cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none">
+                                    <path
+                                            d="M7 21C6.45 21 5.979 20.804 5.587 20.412C5.195 20.02 4.99933 19.5493 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.804 20.021 18.412 20.413C18.02 20.805 17.5493 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+                                            fill="#3153CA"/>
+                                </svg>
+                            </button>
+                            <img src="{{ image.images.url }}"
+                                 class="w-52 h-32 rounded-3xl border border-primary "/>
+                        </div>
+                        {% endfor %}
+                    <div id="image-list" style="display: flex; gap: 6px"></div>
+
+                        <!--Add photo-->
+                        <input type="file"
+                          id="image-file"
+                          accept="image/x-png, image/jpeg"
+                          style="display : none"
+                        />
+                        <label for="image-file"
+                                class="flex flex-col items-center justify-center  w-52 h-32 rounded-3xl border border-primary relative hover:scale-105 transition duration-300 ease-in-out cursor-pointer">
+
+                            <svg class="border border-primary border-dotted" xmlns="http://www.w3.org/2000/svg"
+                                 width="32" height="32" viewBox="0 0 32 32" fill="none" style="border: none">
+                                <g clip-path="url(#clip0_509_793)">
+                                    <path d="M5 16H27" stroke="#3153CA" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"></path>
+                                    <path d="M16 5V27" stroke="#3153CA" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"></path>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_509_793">
+                                        <rect width="32" height="32" fill="white"/>
+                                    </clipPath>
+                                </defs>
+                            </svg>
+
+                            <div class="custom-file-input">
+                          </div>
+                        </label>
+
+                    </div>
+                </div>
+                <!--settings-->
+                <div class="mt-8">
+                    <p class=" font-normal text-2xl mb-6">Настройки</p>
+                    <!--tags-->
+                    <div class=" flex flex-col gap-3">
+                        <!--tag-->
+                        <div class=" flex items-center justify-between">
+                            <!--switch part-->
+                            <div class=" flex items-center gap-3">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                <b class="font-normal text-lg">Теги</b>
+                            </div>
+                            <!--section part-->
+                            <div class="font-normal">
+                                <select id="id_tags" name="tags" multiple class="form-control">
+                                    {% for tag in form.tags.field.queryset %}
+                                        <option value="{{ tag.id }}" {% if tag in restaurant.tags.all %} selected {% endif %}>
+                                            {{ tag.title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--address-->
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Адрес</b>
+                            <input name="{{ form.location.name }}" value="{{ restaurant.location }}" class="bg-secondary rounded-md p-2" placeholder="0/160">
+
+                    </div>
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Instagram</b>
+                        <input name="insta" value="{{ restaurant.insta }}" class=" bg-secondary rounded-md p-2"
+                               placeholder="0/160" required>
+                    </div>
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Whatsapp</b>
+                        <input name="whatsapp" class=" bg-secondary rounded-md p-2" value="{{ restaurant.whatsapp }}"
+                               placeholder="0/160" required>
+                    </div>
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Ссылка</b>
+                        <input name="slug" class=" bg-secondary rounded-md p-2" value="{{ restaurant.slug }}"
+                               placeholder="0/160" required>
+                    </div>
+                    <!--descripton-->
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Описание заведения</b>
+                        <input name="{{ form.description.name }}" value="{{ restaurant.description }}" class=" bg-secondary rounded-md p-2 h-24"
+                               placeholder="0/240">
+                    </div>
+                    <!--more info-->
+                    <div class=" flex flex-col gap-3 mt-3">
+                        <!--more info card-->
+                        <div class=" flex items-center justify-between">
+                            <!--switch part-->
+                            <div class=" flex items-center gap-3">
+                                <label class="switch">
+                                    <input type="checkbox" {% if restaurant.average %} checked {% endif %}>
+                                    <span class="slider round" ></span>
+                                </label>
+                                <b class="font-normal text-lg">Средний чек (₸)</b>
+                            </div>
+                            <!--input part-->
+                            <div class="font-normal">
+                                <label>
+                                    <input name="{{ form.average.name }}" value="{{ restaurant.average }}" class="bg-secondary p-3 rounded-md"
+                                           placeholder="2000 - 5000">
+                                </label>
+                            </div>
+                        </div>
+                        <!--tag2-->
+                        <div class=" flex items-center justify-between">
+                            <!--switch part-->
+                            <div class=" flex items-center gap-3">
+                                <label class="switch">
+                                    <input type="checkbox" {% if restaurant.work_days_1 %} checked {% endif %}>
+                                    <span class="slider round"></span>
+                                </label>
+                                <b class="font-normal text-lg">Часы работы 1</b>
+                            </div>
+                            <!--input part-->
+                            <div class="font-normal">
+                                <input name="{{ form.work_days_1.name }}" value="{{ restaurant.work_days_1 }}" class="bg-secondary p-3 rounded-md"
+                                       placeholder="ПН-ЧТ"/>
+                                <input name="{{ form.work_hours_1.name }}" value="{{ restaurant.work_hours_1 }}" class="bg-secondary p-3 rounded-md"
+                                       placeholder="10:00-5:00"/>
+                            </div>
+                        </div>
+                        <div class=" flex items-center justify-between">
+                            <!--switch part-->
+                            <div class=" flex items-center gap-3">
+                                <label class="switch">
+                                    <input type="checkbox" {% if restaurant.work_days_2 %} checked {% endif %}>
+                                    <span class="slider round"></span>
+                                </label>
+                                <b class="font-normal text-lg">Часы работы 2</b>
+                            </div>
+                            <!--input part-->
+                            <div class="font-normal">
+                                <input name="{{ form.work_days_2.name }}" value="{{ restaurant.work_days_2 }}" class="bg-secondary p-3 rounded-md"
+                                       placeholder="ПН-ЧТ"/>
+                                <input name="{{ form.work_hours_2.name }}" value="{{ restaurant.work_hours_2 }}" class="bg-secondary p-3 rounded-md"
+                                       placeholder="10:00-5:00"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--kitchen-->
+                    <div class=" mt-3 flex flex-col gap-3">
+                        <b class="font-normal text-lg">Кухня</b>
+                        <label>
+                            <input name="{{ form.kitchen.name }}" value="{{ restaurant.kitchen }}" class=" bg-secondary rounded-md p-2"
+                                   placeholder="0/160">
+                        </label>
+                    </div>
+                    <!--phone-->
+                    <div class=" flex items-center justify-between mt-3">
+                        <!--switch part-->
+                        <div class=" flex items-center gap-3">
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <b class="font-normal text-lg">Телефон</b>
+                        </div>
+                        <!--input part-->
+                        <div class="font-normal">
+
+                            <label>
+                                <input name="{{ form.phone_number.name }}" value="{{ restaurant.phone_number }}" class="bg-secondary p-3 rounded-md"
+                                       placeholder="+7 (7_ _)- _ _ _ - _ _ - _ _"/>
+                            </label>
+                        </div>
+                    </div>
+                    <!--menuforkitchen-->
+                    <div class=" flex items-center justify-between mt-3 mb-8">
+                        <!--switch part-->
+                        <div class=" flex items-center gap-3">
+                            <label class="switch">
+                                <input type="checkbox" {% if restaurant.menu %} checked {% endif %}>
+                                <span class="slider round"></span>
+                            </label>
+                            <b class="font-normal text-lg">Меню</b>
+                        </div>
+                        <!--input part-->
+                        <input class="text-primary text-center mr-3" type="file" name="{{ form.menu.name }}" value="{{ restaurant.menu }}">
+
+                    </div>
+                    <div class="flex flex-row" style="justify-content: space-between; margin-bottom: 200px; margin-top: 50px;">
+                        <div class="flex gap-32">
+                            <!-- First block -->
+                            <p class="text-lg w-40">
+                                Доступные <br>
+                                суммы рассрочки
+                            </p>
+                            <!-- First block checkbox -->
+                            <div class="font-normal">
+                                {{ form.sum_of_credit }}
+{#                                <select id="sum_of_credit" name="sum_of_credit" multiple class="form-control">#}
+{#                                    {% for sum in form.sum_of_credit %}#}
+{#                                        <option value="{{ sum.id }}" {% if sum in restaurant.sum_of_credit.all %} selected {% endif %}>#}
+{#                                            {{ sum }}#}
+{#                                        </option>#}
+{#                                    {% endfor %}#}
+{#                                </select>#}
+                            </div>
+{#                            <div>#}
+{#                                <ul class="text-xl">#}
+{##}
+{#                                    {% for sum_of_credit in form.sum_of_credit %}#}
+{#                                    <li class="flex items-center" {% if sum_of_credit in restaurant.sum_of_credit.all %} ch>#}
+{#                                        {{ sum_of_credit }}#}
+{#                                    </li>#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+{#                            </div>#}
+                        </div>
+                        <div class="flex gap-32">
+                            <!-- Second block -->
+                            <p class="text-lg w-40">
+                                Доступные <br>
+                                срок рассрочки
+                            </p>
+                            <!-- Second block checkbox -->
+                            <div>
+{#                                <ul class="text-xl">#}
+                            {{ form.period_of_credit  }}
+{#                                <select id="period_of_credit" name="period_of_credit" multiple class="form-control">#}
+{#                                    {% for period_of_credit in form.period_of_credit %}#}
+{#                                        <option value="{{ period_of_credit.id }}" {% if period_of_credit in restaurant.period_of_credit.all %} selected {% endif %}>#}
+{#                                            {{ period_of_credit }}#}
+{#                                        </option>#}
+{#                                    {% endfor %}#}
+{#                                </select>#}
+{#                                    {% for period_of_credit in form.period_of_credit %}#}
+{#                                    <li class="flex items-center">#}
+{#                                        {{ period_of_credit }}#}
+{#                                    </li>#}
+{#                                    {% endfor %}#}
+{#                                </ul>#}
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit"
+                            class="bg-primary text-white font-medium px-24 py-3 rounded-md hover:scale-105 transition duration-500 ease-in-out">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+            <!--right side-->
+
+
+        </main>
+    </form>
+    <script>
+        document.getElementById("requestsBtn").addEventListener("click", function () {
+            var dropdown = document.getElementById("dropdown");
+
+            // Переключаем классы для отображения/скрытия элемента с анимацией
+            if (dropdown.classList.contains("hidden")) {
+                dropdown.classList.remove("hidden");
+                dropdown.classList.add("visible");
+            } else {
+                dropdown.classList.remove("visible");
+                dropdown.classList.add("hidden");
+            }
+        });
+
+
+    </script>
+</div>
+<script>
+    const logoInput = document.getElementById('image-logo');
+    const logoImage = document.getElementById('logo');
+{#<input#}
+{#    type="image"#}
+{#    name="image"#}
+{#    id="image"#}
+{#    style="display: none"#}
+{#>#}
+{#<label for="image">#}
+{#    <img id="mainImage" src="{{ restaurant.image.url }}" alt="hz"#}
+{#             width="300px">#}
+{#</label>#}
+    const mainInput = document.querySelector('[name="image"]');
+    const mainImage = document.getElementById('mainImage');
+
+    // Change logo image when a new image is selected
+    logoInput.addEventListener('change', async function () {
+        const selectedFile = this.files[0];
+        const image = await convertToBase64(selectedFile);
+        const imageElement = document.createElement('img');
+        imageElement.src = image;
+        imageElement.classList = "w-52 h-32 rounded-3xl border border-primary"
+
+        // Add the uploaded image to the list
+        const formData = new FormData();
+        formData.append('images', selectedFile);
+        try {
+            const csrftoken = getCookie('csrftoken'); // Retrieve the CSRF token from the cookie
+
+            const response = await fetch('/upload-logo/' + {{restaurant.id}},
+                {
+                    method: 'POST',
+                        headers: {
+                        'X-CSRFToken': csrftoken // Include the CSRF token in the request headers
+                    },
+                    body: formData
+                }
+            );
+            if (response.ok) {
+                console.log('Images uploaded successfully!');
+                window.location.reload()
+                // Handle success: Maybe show a success message to the user
+            } else {
+                console.error('Failed to upload images:', response.statusText);
+                // Handle failure: Maybe show an error message to the user
+            }
+        } catch (error) {
+            console.error('Error uploading images:', error);
+            // Handle errors: Maybe show an error message to the user
+        }
+    });
+    mainInput.addEventListener('change', async function () {
+        const selectedFile = this.files[0];
+        mainImage.src = await convertToBase64(selectedFile);
+        {#imageElement.classList = "w-52 h-32 rounded-3xl border border-primary"#}
+
+        // Add the uploaded image to the list
+        {#const formData = new FormData();#}
+        {#formData.append('images', selectedFile);#}
+        {#try {#}
+        {#    const csrftoken = getCookie('csrftoken'); // Retrieve the CSRF token from the cookie#}
+        {##}
+        {#    const response = await fetch('/upload-logo/' + {{restaurant.id}},#}
+        {#        {#}
+        {#            method: 'POST',#}
+        {#                headers: {#}
+        {#                ч // Include the CSRF token in the request headers#}
+        {#            },#}
+        {#            body: formData#}
+        {#        }#}
+        {#    );#}
+        {#    if (response.ok) {#}
+        {#        console.log('Images uploaded successfully!');#}
+        {#        window.location.reload()#}
+        {#        // Handle success: Maybe show a success message to the user#}
+        {#    } else {#}
+        {#        console.error('Failed to upload images:', response.statusText);#}
+        {#        // Handle failure: Maybe show an error message to the user#}
+        {#    }#}
+        {#} catch (error) {#}
+        {#    console.error('Error uploading images:', error);#}
+        {#    // Handle errors: Maybe show an error message to the user#}
+        {#}#}
+    });
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const input_file = document.getElementById('image-file');
+    const imageList = document.getElementById('image-list');
+
+    const convertToBase64 = file => new Promise((resolve) => {
+       const fileReader = new FileReader();
+       fileReader.readAsDataURL(file);
+       fileReader.onload = () => resolve(fileReader.result);
+    });
+
+    input_file.addEventListener('change', async function() {
+       const files = document.querySelector('#image-file').files;
+
+       for (let i = 0; i < files.length; i++) {
+           const image = await convertToBase64(files[i]);
+           const imageElement = document.createElement('img');
+           imageElement.src = image;
+           imageElement.classList = "w-52 h-32 rounded-3xl border border-primary"
+
+           // Add the uploaded image to the list
+            const formData = new FormData();
+            formData.append('images', files[i]);
+
+            try {
+                const csrftoken = getCookie('csrftoken'); // Retrieve the CSRF token from the cookie
+
+                const response = await fetch('/upload-images/' + {{restaurant.id}}, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken // Include the CSRF token in the request headers
+                    },
+                    body: formData
+                });
+                    if (response.ok) {
+                    console.log('Images uploaded successfully!');
+                   imageList.appendChild(imageElement);
+                   window.location.reload()
+                    // Handle success: Maybe show a success message to the user
+                } else {
+                    console.error('Failed to upload images:', response.statusText);
+                    // Handle failure: Maybe show an error message to the user
+                }
+            } catch (error) {
+                console.error('Error uploading images:', error);
+                // Handle errors: Maybe show an error message to the user
+            }
+
+       }
+    });
+
+    function delete_restaurant_image(image_id){
+        fetch('/delete_image/' + image_id);
+        window.location.reload();
+    }
+</script>
+</body>
+
+</html>

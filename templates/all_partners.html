@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static '/css/all_orders.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3153CA",
+                        secondary: "#F1F1F1",
+                        text: "#343434",
+                        text1: "#C4C4C4",
+                        text3: "#323C47"
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+<!--Container-->
+<div class=" flex">
+    <!--SideBar-->
+{% include 'sidebar.html' %}
+    <main class="content px-14 py-8 flex flex-col gap-3">
+        <!--list of partners-->
+        <h2 class="text-4xl font-bold text-text">Cписок партнеров</h2>
+        <!--Count of partners -->
+        <div class=" flex gap-24">
+            <div class=" flex flex-col items-center">
+                <h2 class=" text-text font-medium text-6xl">{{total_restaurants}}</h2>
+                <p class=" text-text1 font-medium">Всего партнеров</p>
+            </div>
+        </div>
+        <!--Search-->
+        <form method="get">
+            <div class="nosubmit  w-96">
+                <input class="nosubmit outline-none " type="text" name="search_query"
+                       value="{{ request.GET.search_query }}" placeholder="Search...">
+            </div>
+            <br>
+            <!--filter and upadate-->
+            <div class=" flex justify-between items-center max-w-6xl">
+                <!--Filter-->
+                <div class="flex gap-4 items-center">
+                    <h4 class=" font-bold text-text">Фильтр:</h4>
+                    <div class="flex bg-secondary items-center px-3 py-1 rounded-md hover:opacity-75 cursor-pointer">
+                        {% if request.GET.sort_orders == 'asc' %}
+                        <button type="submit" name="sort_orders" value="desc">По возрастанию числа заявок</button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 15L12 9L6 15" stroke="#3153CA" stroke-width="1.3" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        {% else %}
+                        <button type="submit" name="sort_orders" value="asc">По убыванию числа заявок</button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 9L12 15L18 9" stroke="#3153CA" stroke-width="1.3" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        {% endif %}
+                    </div>
+                    <div class="flex bg-secondary items-center px-3 py-1 rounded-md hover:opacity-75 cursor-pointer">
+                        {% if request.GET.sort_amount == 'asc' %}
+                        <button type="submit" name="sort_amount" value="desc">По возрастанию суммы</button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 9L12 15L18 9" stroke="#3153CA" stroke-width="1.3" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                        {% else %}
+                        <button type="submit" name="sort_amount" value="asc">По убыванию суммы
+                        </button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M6 9L12 15L18 9" stroke="#3153CA" stroke-width="1.3" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                        </svg>
+
+                        {% endif %}
+                    </div>
+                </div>
+                <!--update list-->
+                <div class="flex gap-1 hover:bg-primary hover:bg-opacity-10 p-1 rounded-md cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                                d="M17.65 6.35001C16.8118 5.50428 15.7944 4.85762 14.6728 4.4578C13.5512 4.05798 12.3542 3.9152 11.17 4.04001C7.50002 4.41001 4.48002 7.39001 4.07002 11.06C3.52002 15.91 7.27002 20 12 20C13.5101 20 14.9892 19.5715 16.2655 18.7643C17.5418 17.9572 18.5628 16.8044 19.21 15.44C19.53 14.77 19.05 14 18.31 14C17.94 14 17.59 14.2 17.43 14.53C16.8494 15.779 15.8564 16.79 14.6179 17.3928C13.3795 17.9957 11.9712 18.1536 10.63 17.84C8.41002 17.35 6.62002 15.54 6.15002 13.32C5.95245 12.4423 5.95474 11.5313 6.15672 10.6546C6.35869 9.77787 6.75519 8.95776 7.31687 8.25493C7.87856 7.55211 8.59107 6.98454 9.40169 6.59423C10.2123 6.20392 11.1003 6.00084 12 6.00001C13.66 6.00001 15.14 6.69001 16.22 7.78001L14.71 9.29001C14.08 9.92001 14.52 11 15.41 11H19C19.55 11 20 10.55 20 10V6.41001C20 5.52001 18.92 5.07001 18.29 5.70001L17.65 6.35001Z"
+                                fill="#3153CA"/>
+                    </svg>
+                    <button type="submit" name="reload_data" class="text-primary font-medium">Обновить список</button>
+                </div>
+            </div>
+        </form>
+        <!--Table-->
+        <table class=" mt-10">
+            <!--Headers-->
+            <thead>
+            <tr>
+                <th>Лого и название</th>
+                <th>Локация</th>
+                <th>Номер телефона</th>
+                <th>Статус</th>
+                <th>Обработано заявок</th>
+                <th>Общая сумма</th>
+
+            </tr>
+            </thead>
+            <!--rows-->
+            <tbody>
+            {% for restaurant in restaurants %}
+            <tr>
+                <td class="items-center text-text3 text-[1rem] font-medium">
+                    <img {% if restaurant.logo %} src="{{ restaurant.logo.url }}" {% endif %} alt="LOGO" width="120px">
+                    <br>
+                    <h3>{{ restaurant.title }}</h3>
+                </td>
+                <td>{{ restaurant.location }}</td>
+                <td>{{ restaurant.phone_number }}</td>
+                <td>{% if restaurant.status %}Активирован{% else %}Неактивен{% endif %}</td>
+                <td>{{ restaurant.orders.count }}</td>
+                <td>
+                    {{ restaurant.total_order_sum }}
+                </td>
+                <td>
+                     <div class="relative inline-block text-left" onclick="toggleDropdown('{{ restaurant.id }}')">
+                        <svg class="hover:bg-secondary  w-7 h-7 p-1 rounded-full cursor-pointer"
+                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                             fill="none">
+                            <g clip-path="url(#clip0_509_645)">
+                                <ellipse cx="7.66663" cy="3" rx="1" ry="1" fill="#747474"/>
+                                <ellipse cx="7.66663" cy="8.33333" rx="1" ry="1" fill="#747474"/>
+                                <ellipse cx="7.66663" cy="13.6667" rx="1" ry="1" fill="#747474"/>
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_509_645">
+                                    <rect width="16" height="16" fill="white"/>
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ">
+                           <div id="dropdownMenu{{ restaurant.id }}" class="py-1 hidden">
+                                <form method="post" action="{% url 'restaurant_edit' pk=restaurant.id %}">
+                                    {% csrf_token %}
+                                <button type="submit"
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Редактировать</button>
+                                </form>
+                                <form method="post" action="{% url 'restaurant_delete' pk=restaurant.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="block px-4 py-2 text-sm  text-red-500 hover:bg-gray-100">Удалить из
+                                        списка
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+    </main>
+</div>
+<script>
+    document.getElementById("requestsBtn").addEventListener("click", function () {
+        var dropdown = document.getElementById("dropdown");
+
+        // Переключаем классы для отображения/скрытия элемента с анимацией
+        if (dropdown.classList.contains("hidden")) {
+            dropdown.classList.remove("hidden");
+            dropdown.classList.add("visible");
+        } else {
+            dropdown.classList.remove("visible");
+            dropdown.classList.add("hidden");
+        }
+    });
+
+    function toggleDropdown(restaurantId) {
+        var dropdownMenu = document.getElementById('dropdownMenu' + restaurantId);
+        dropdownMenu.classList.toggle('hidden');
+    }
+
+</script>
+</body>
+
+</html>
